@@ -24,7 +24,7 @@ CURMODULE = $(CURDIR).a
 all: $(CURMODULE)
 
 $(CURMODULE): $(OBJECTS) $(SUBMODULES)
-	$(AR) $(ARFLAGS) $@ $<
+	$(AR) $(ARFLAGS) $@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

@@ -11,10 +11,13 @@
 
 #include <Protocol/Types/Types.h>
 
-int main(int argc, char *argv[]) {
-  Protocol::Types::Boolean b1;
-
-  b1 = false;
-
-  return 0;
+namespace Protocol {
+namespace Types {
+Byte &Byte::operator=(int8_t rhs) {
+  val = rhs;
+  return *this;
 }
+
+Byte::operator int8_t() const { return val; }
+} // namespace Types
+} // namespace Protocol

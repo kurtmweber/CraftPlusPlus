@@ -9,6 +9,8 @@
  * licensing information.
  */
 
+#include <cstdint>
+
 #ifndef _PROTOCOL_TYPES_TYPES_H
 #define _PROTOCOL_TYPES_TYPES_H
 
@@ -19,8 +21,17 @@ private:
   bool val;
 
 public:
-  Boolean &operator=(bool &src);
+  Boolean &operator=(bool rhs);
   operator bool() const;
+};
+
+class Byte {
+private:
+  int8_t val;
+
+public:
+  Byte &operator=(int8_t rhs);
+  operator int8_t() const;
 };
 } // namespace Types
 } // namespace Protocol

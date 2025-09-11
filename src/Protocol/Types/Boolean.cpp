@@ -13,8 +13,8 @@
 
 namespace Protocol {
 namespace Types {
-Boolean &Boolean::operator=(bool &src) {
-  val = src;
+Boolean &Boolean::operator=(bool rhs) {
+  val = rhs;
   return *this;
 }
 
