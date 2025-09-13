@@ -32,7 +32,10 @@ craftplusplus: $(OBJECTS) $(SUBMODULES)
 	cd $(dir $@) && make
 
 clean-subdirs: $(SUBDIRS)
-	$(foreach dir,$(SUBDIRS),cd $(dir) && make clean)
+	@for d in $(SUBDIRS); do \
+		cd $$d && make clean; \
+		cd ..; \
+    done
 
 clean: clean-subdirs
 	rm -f craftplusplus *.o *.a

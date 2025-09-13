@@ -10,6 +10,7 @@
  */
 
 #include <cstdint>
+#include <vector>
 
 #ifndef _PROTOCOL_TYPES_TYPES_H
 #define _PROTOCOL_TYPES_TYPES_H
@@ -32,6 +33,15 @@ private:
 public:
   Byte &operator=(int8_t rhs);
   operator int8_t() const;
+};
+
+class VarInt {
+private:
+  int32_t val;
+  std::vector<uint8_t> var_int;
+
+public:
+  VarInt &operator=(int32_t rhs);
 };
 } // namespace Types
 } // namespace Protocol
