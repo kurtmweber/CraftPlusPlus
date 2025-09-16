@@ -10,32 +10,21 @@
 
 export CXX = g++
 export INCLUDE = -I$(shell pwd)
-export CXXFLAGS = ${INCLUDE}
+export CXXFLAGS = -std=c++20 ${INCLUDE}
 
-SUBDIRS = $(wildcard */)
-SUBMODULES = $(foreach dir, $(SUBDIRS),$(dir)$(subst /,.a,$(dir)))
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
-
-.PHONY: clean
+SOURCES=$(shell find . -type f -iname '*.cpp' | sort)
+OBJECTS=$(SOURCES:.cpp=.o)
 
 #all: craftplusplus
+
 all: craftplusplus
 
-craftplusplus: $(OBJECTS) $(SUBMODULES)
+craftplusplus: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-%.a:
-	cd $(dir $@) && make
 
-clean-subdirs: $(SUBDIRS)
-	@for d in $(SUBDIRS); do \
-		cd $$d && make clean; \
-		cd ..; \
-    done
-
-clean: clean-subdirs
-	rm -f craftplusplus *.o *.a
+clean:
+	rm -f craftplusplus $(OBJECTS)

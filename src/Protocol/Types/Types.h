@@ -10,6 +10,7 @@
  */
 
 #include <cstdint>
+#include <iostream>
 #include <vector>
 
 #ifndef _PROTOCOL_TYPES_TYPES_H
@@ -36,6 +37,9 @@ public:
 };
 
 class VarInt {
+
+  friend std::ostream &operator<<(std::ostream &os, VarInt const &m);
+
 private:
   int32_t val;
   std::vector<uint8_t> var_int;
