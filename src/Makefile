@@ -25,6 +25,5 @@ craftplusplus: $(OBJECTS)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-
 clean:
 	rm -f craftplusplus $(OBJECTS)
