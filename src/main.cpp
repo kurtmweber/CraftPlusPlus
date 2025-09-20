@@ -8,21 +8,20 @@
  * HL3-CL-ECO-EXTR-FFD-MEDIA-MY-SUP-SV-TAL-USTA-XUAR See file LICENSE for full
  * licensing information.
  */
+#include <chrono>
 #include <cstdint>
 #include <iostream>
+#include <thread>
 
+#include <Network/Socket/Socket.h>
 #include <Protocol/Types/Types.h>
 
 int main(int argc, char *argv[]) {
-  int32_t testvals[] = {0,     1,       2,          127, 128,        255,
-                        25565, 2097151, 2147483647, -1,  -2147483648};
-  Protocol::Types::VarInt vi;
+  Network::Socket::Listener l(25536, INADDR_ANY);
 
-  for (auto i = 0; i < sizeof(testvals) / sizeof(int32_t); i++) {
-    vi = testvals[i];
-    std::cout << vi;
-    std::cout << std::endl;
-  }
+  l.Listen();
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(69000));
 
   return 0;
 }

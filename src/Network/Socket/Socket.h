@@ -10,6 +10,7 @@
  */
 
 #include <cstdint>
+#include <future>
 #include <netinet/in.h>
 
 namespace Network {
@@ -25,7 +26,10 @@ protected:
 class Listener : Socket {
 public:
   Listener(uint16_t port, uint32_t addr);
-  ~Listener();
+  std::future<void> Listen();
+
+private:
+  void DoListen();
 };
 } // namespace Socket
 } // namespace Network

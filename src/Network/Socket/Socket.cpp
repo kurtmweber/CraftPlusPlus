@@ -9,6 +9,9 @@
  * licensing information.
  */
 
+#include <cerrno>
+#include <cstring>
+#include <iostream>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -18,6 +21,9 @@ namespace Network {
 namespace Socket {
 Socket::Socket() {
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockfd == -1) {
+    std::cerr << std::strerror(errno) << std::endl;
+  }
   return;
 }
 
