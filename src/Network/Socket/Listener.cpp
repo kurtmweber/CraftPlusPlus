@@ -16,12 +16,13 @@
 #include <poll.h>
 #include <sys/socket.h>
 
+#include <Exceptions/Exceptions.h>
 #include <Network/Socket/Socket.h>
 
 namespace Network {
 namespace Socket {
 void Listener::DoListen() {
-  std::cout << "Buttsex" << std::endl;
+  std::cout << "Test" << std::endl;
   return;
 }
 
@@ -30,13 +31,14 @@ std::future<void> Listener::Listen() {
 
   auto a = listen(sockfd, 500);
   if (a == -1) {
-    std::cerr << std::strerror(errno) << std::endl;
+    throw Exceptions::SocketException(errno);
   }
 
   fut = std::async(&Listener::DoListen, this);
 
   return fut;
 }
+
 Listener::Listener(uint16_t port, uint32_t addr) : Socket() {
   sockaddr_in sa;
 
@@ -45,7 +47,7 @@ Listener::Listener(uint16_t port, uint32_t addr) : Socket() {
   sa.sin_addr.s_addr = addr;
   auto a = bind(sockfd, reinterpret_cast<sockaddr *>(&sa), sizeof(sa));
   if (a == -1) {
-    std::cerr << std::strerror(errno) << std::endl;
+    throw Exceptions::SocketException(errno);
   }
 
   return;

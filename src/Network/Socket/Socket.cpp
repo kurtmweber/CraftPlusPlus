@@ -15,6 +15,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <Exceptions/Exceptions.h>
 #include <Network/Socket/Socket.h>
 
 namespace Network {
@@ -22,7 +23,7 @@ namespace Socket {
 Socket::Socket() {
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd == -1) {
-    std::cerr << std::strerror(errno) << std::endl;
+    throw Exceptions::SocketException(errno);
   }
   return;
 }
