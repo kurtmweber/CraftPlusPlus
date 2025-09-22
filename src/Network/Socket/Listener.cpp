@@ -27,14 +27,14 @@ void Listener::DoListen() {
   // since C++'s futures library doesn't actually provide a mechanism for
   // interrupting threads
   pollfd pfd = {sockfd, POLLIN, 0};
-  std::cout << "Polling" << std::endl;
 
   while (1) {
     auto ret = poll(&pfd, 1, 5000);
     if (ret) {
-      std::cout << "Connection available!" << std::endl;
+      accept(sockfd, nullptr, nullptr);
+      std::cout << "Accepted!" << std::endl;
     } else {
-      std::cout << "Timed out" << std::endl;
+      // Check for any messages we may need to check on
     }
   }
   return;
@@ -62,7 +62,7 @@ Listener::Listener(uint16_t port, uint32_t addr) : Socket() {
   auto a = bind(sockfd, reinterpret_cast<sockaddr *>(&sa), sizeof(sa));
   if (a == -1) {
     throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
-    }
+  }
 
   return;
 }
