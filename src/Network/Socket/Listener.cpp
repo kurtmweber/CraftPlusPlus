@@ -22,19 +22,33 @@
 namespace Network {
 namespace Socket {
 void Listener::DoListen() {
-  std::cout << "Test" << std::endl;
+  // we poll rather than loop on accept because poll allows us to specify a
+  // timeout, which we take advantage of to periodically check for messages
+  // since C++'s futures library doesn't actually provide a mechanism for
+  // interrupting threads
+  pollfd pfd = {sockfd, POLLIN, 0};
+  std::cout << "Polling" << std::endl;
+
+  while (1) {
+    auto ret = poll(&pfd, 1, 5000);
+    if (ret) {
+      std::cout << "Connection available!" << std::endl;
+    } else {
+      std::cout << "Timed out" << std::endl;
+    }
+  }
   return;
 }
 
-std::future<void> Listener::Listen() {
-  std::future<void> fut;
+std::future<void> *Listener::Listen() {
+  auto fut = new std::future<void>;
 
   auto a = listen(sockfd, 500);
   if (a == -1) {
-    throw Exceptions::SocketException(errno);
+    throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
   }
 
-  fut = std::async(&Listener::DoListen, this);
+  *fut = std::async(&Listener::DoListen, this);
 
   return fut;
 }
@@ -47,8 +61,8 @@ Listener::Listener(uint16_t port, uint32_t addr) : Socket() {
   sa.sin_addr.s_addr = addr;
   auto a = bind(sockfd, reinterpret_cast<sockaddr *>(&sa), sizeof(sa));
   if (a == -1) {
-    throw Exceptions::SocketException(errno);
-  }
+    throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
+    }
 
   return;
 }

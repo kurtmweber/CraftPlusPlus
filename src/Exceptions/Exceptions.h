@@ -17,5 +17,7 @@ class SocketException : public std::runtime_error {
 public:
   SocketException(std::string_view msg);
   SocketException(int e);
+  SocketException(int e, std::string file, std::string func,
+                  unsigned long line);
 };
 } // namespace Exceptions

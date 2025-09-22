@@ -22,8 +22,9 @@ namespace Network {
 namespace Socket {
 Socket::Socket() {
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  std::cout << "Socket" << std::endl;
   if (sockfd == -1) {
-    throw Exceptions::SocketException(errno);
+    throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
   }
   return;
 }

@@ -24,4 +24,12 @@ SocketException::SocketException(std::string_view msg)
 SocketException::SocketException(int e) : std::runtime_error(std::strerror(e)) {
   return;
 }
+
+SocketException::SocketException(int e, std::string file, std::string func,
+                                 unsigned long line)
+    : std::runtime_error(static_cast<std::string>(std::strerror(e)) + " in " +
+                         file + ", line " + std::to_string(line) + ", " +
+                         func) {
+  return;
+}
 } // namespace Exceptions
