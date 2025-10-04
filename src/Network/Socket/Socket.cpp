@@ -9,6 +9,7 @@
  * licensing information.
  */
 
+#include <array>
 #include <cerrno>
 #include <cstring>
 #include <iostream>
@@ -26,6 +27,20 @@ Socket::Socket() {
     throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
   }
   return;
+}
+
+Socket::Socket(int sf) {
+  sockfd = sf;
+  return;
+}
+
+template <typename T> T Socket::Read() {
+  const size_t num_bytes = sizeof(T);
+  T buf;
+
+  recv(sockfd, &buf, num_bytes, MSG_WAITALL);
+
+  return buf;
 }
 
 Socket::~Socket() { close(sockfd); }

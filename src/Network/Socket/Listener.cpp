@@ -13,11 +13,13 @@
 #include <cstring>
 #include <future>
 #include <iostream>
+#include <netinet/in.h>
 #include <poll.h>
 #include <sys/socket.h>
 
 #include <Exceptions/Exceptions.h>
 #include <Network/Socket/Socket.h>
+#include <Protocol/Protocol.h>
 
 namespace Network {
 namespace Socket {
@@ -31,8 +33,22 @@ void Listener::DoListen() {
   while (1) {
     auto ret = poll(&pfd, 1, 5000);
     if (ret) {
-      accept(sockfd, nullptr, nullptr);
+      sockaddr_in address;
+      socklen_t addrlen = sizeof(address);
+
+      auto connsock =
+          accept(sockfd, reinterpret_cast<sockaddr *>(&address), &addrlen);
+      if (connsock == -1) {
+        throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
+      }
+
       std::cout << "Accepted!" << std::endl;
+      auto conn = new Connected(connsock, address);
+      auto prot = new Protocol::Protocol(*conn);
+
+      auto fut = new std::future<void>;
+
+      *fut = std::async(&Protocol::Protocol::Run, prot);
     } else {
       // Check for any messages we may need to check on
     }

@@ -13,6 +13,8 @@
 #include <iostream>
 #include <vector>
 
+#include <Protocol/Protocol.h>
+
 #ifndef _PROTOCOL_TYPES_TYPES_H
 #define _PROTOCOL_TYPES_TYPES_H
 
@@ -46,6 +48,7 @@ private:
 
 public:
   VarInt &operator=(int32_t rhs);
+  VarInt &operator<<(Protocol &rhs);
 };
 } // namespace Types
 } // namespace Protocol

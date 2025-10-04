@@ -9,9 +9,13 @@
  * licensing information.
  */
 
+#ifndef _NETWORK_SOCKET_H
+#define _NETWORK_SOCKET_H
+
 #include <cstdint>
 #include <future>
 #include <netinet/in.h>
+#include <sys/socket.h>
 
 namespace Network {
 namespace Socket {
@@ -19,8 +23,22 @@ class Socket {
 protected:
   int sockfd;
 
+  sockaddr_in local;
+  sockaddr_in remote;
+
   Socket();
+  Socket(int sf);
   ~Socket();
+
+public:
+  template <typename T> T Read();
+};
+
+class Connected : Socket {
+public:
+  Connected(int sf);
+  Connected(int sf, sockaddr_in remote_addr);
+  ~Connected();
 };
 
 class Listener : Socket {
@@ -33,3 +51,5 @@ private:
 };
 } // namespace Socket
 } // namespace Network
+
+#endif

@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include <Protocol/Protocol.h>
 #include <Protocol/Types/Types.h>
 
 namespace Protocol {
@@ -53,6 +54,12 @@ VarInt &VarInt::operator=(int32_t rhs) {
   } while (u_rhs);
 
   return *this;
+}
+
+VarInt &VarInt::operator<<(Protocol &rhs) {
+  int32_t tmp;
+
+    return *this;
 }
 } // namespace Types
 } // namespace Protocol
