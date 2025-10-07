@@ -21,4 +21,6 @@ Protocol::Protocol(Network::Socket::Connected &sock) : socket(sock) {
 }
 
 void Protocol::Run() { return; }
+
+std::byte Protocol::Read() { return socket.Read<std::byte>(); }
 } // namespace Protocol

@@ -26,6 +26,8 @@ public:
   Protocol(Network::Socket::Connected &sock);
   ~Protocol();
 
+  std::byte Read();
+
   void Run();
 };
 } // namespace Protocol

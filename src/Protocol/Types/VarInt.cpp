@@ -10,7 +10,9 @@
  */
 
 #include <cstdint>
+#include <cstring>
 #include <format>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -35,6 +37,7 @@ std::ostream &operator<<(std::ostream &os, VarInt const &rhs) {
   }
   return os << str;
 }
+
 VarInt &VarInt::operator=(int32_t rhs) {
   uint8_t byte = 0;
   uint32_t u_rhs = 0;
@@ -56,10 +59,41 @@ VarInt &VarInt::operator=(int32_t rhs) {
   return *this;
 }
 
+VarInt &VarInt::operator=(std::vector<uint8_t> vi) {
+  uint8_t b;
+  int32_t tmp;
+  int i = 0;
+  for (int i = 0; i < vi.size(); i++) {
+    b = vi[i];
+    tmp |= ((b & 0x7F) << (i * 7));
+
+    if (!(b & 0x80)) {
+      break;
+    }
+  }
+
+  val = tmp;
+  var_int = vi;
+
+  return *this;
+}
+
 VarInt &VarInt::operator<<(Protocol &rhs) {
   int32_t tmp;
+  std::vector<uint8_t> vi;
 
-    return *this;
+  uint8_t inb = static_cast<uint8_t>(rhs.Read());
+  vi.push_back(inb);
+  while (inb & 0x80) {
+    uint8_t inb = static_cast<uint8_t>(rhs.Read());
+    vi.push_back(inb);
+  }
+
+  *this = vi;
+
+  return *this;
 }
+
+VarInt::operator int32_t() { return val; }
 } // namespace Types
 } // namespace Protocol

@@ -31,17 +31,24 @@ protected:
   ~Socket();
 
 public:
-  template <typename T> T Read();
+  template <typename T> T Read() {
+    const size_t num_bytes = sizeof(T);
+    T buf;
+
+    recv(sockfd, &buf, num_bytes, MSG_WAITALL);
+
+    return buf;
+  }
 };
 
-class Connected : Socket {
+class Connected : public Socket {
 public:
   Connected(int sf);
   Connected(int sf, sockaddr_in remote_addr);
   ~Connected();
 };
 
-class Listener : Socket {
+class Listener : public Socket {
 public:
   Listener(uint16_t port, uint32_t addr);
   std::future<void> *Listen();

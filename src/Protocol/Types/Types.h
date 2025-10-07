@@ -48,7 +48,10 @@ private:
 
 public:
   VarInt &operator=(int32_t rhs);
+  VarInt &operator=(std::vector<uint8_t> vi);
   VarInt &operator<<(Protocol &rhs);
+
+  operator int32_t();
 };
 } // namespace Types
 } // namespace Protocol
