@@ -17,21 +17,11 @@
 #include <Protocol/Types/Types.h>
 
 int main(int argc, char *argv[]) {
-  /*auto l = new Network::Socket::Listener(25536, INADDR_ANY);
+  auto l = new Network::Socket::Listener(25565, INADDR_ANY);
 
   auto fut = l->Listen();
 
-  fut->wait();*/
-
-  Protocol::Types::VarInt vi;
-
-  std::vector<uint8_t> tmp;
-  tmp.push_back(0x80);
-  tmp.push_back(0x80);
-  tmp.push_back(0x80);
-  tmp.push_back(0x80);
-  tmp.push_back(0x08);
-  vi = tmp;
+  fut->wait();
 
   return 0;
 }

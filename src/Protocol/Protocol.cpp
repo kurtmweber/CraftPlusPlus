@@ -20,7 +20,14 @@ Protocol::Protocol(Network::Socket::Connected &sock) : socket(sock) {
   return;
 }
 
-void Protocol::Run() { return; }
+void Protocol::Run() {
+  // Read the first VarInt
+  Types::VarInt vi;
+  vi << *this;
+
+  std::cout << vi << std::endl;
+  return;
+}
 
 std::byte Protocol::Read() { return socket.Read<std::byte>(); }
 } // namespace Protocol

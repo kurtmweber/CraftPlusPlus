@@ -14,6 +14,7 @@
 
 #include <cstdint>
 #include <future>
+#include <iostream>
 #include <netinet/in.h>
 #include <sys/socket.h>
 
