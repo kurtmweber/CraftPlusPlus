@@ -9,7 +9,6 @@
  * licensing information.
  */
 
-#include <array>
 #include <cerrno>
 #include <cstring>
 #include <iostream>
@@ -18,6 +17,7 @@
 
 #include <Exceptions/Exceptions.h>
 #include <Network/Socket/Socket.h>
+#include <Protocol/Packet/Packet.h>
 
 namespace Network {
 namespace Socket {
@@ -32,6 +32,17 @@ Socket::Socket() {
 Socket::Socket(int sf) {
   sockfd = sf;
   return;
+}
+
+Protocol::Packet::Packet Socket::Read(size_t num_bytes) {
+  // replace this with std::inplace_vector once available
+  auto bytes = new std::byte[num_bytes];
+
+  auto ret = recv(sockfd, bytes, num_bytes, 0);
+
+  if (ret == -1) {
+    throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
+  }
 }
 
 Socket::~Socket() { close(sockfd); }

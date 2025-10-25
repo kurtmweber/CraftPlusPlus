@@ -18,6 +18,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
+#include <Protocol/Packet/Packet.h>
+
 namespace Network {
 namespace Socket {
 class Socket {
@@ -40,6 +42,8 @@ public:
 
     return buf;
   }
+
+  Protocol::Packet::Packet Read(size_t num_bytes);
 };
 
 class Connected : public Socket {
