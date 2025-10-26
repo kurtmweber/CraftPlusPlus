@@ -13,6 +13,7 @@
 #include <cstring>
 #include <iostream>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 #include <Exceptions/Exceptions.h>
@@ -24,6 +25,12 @@ namespace Socket {
 Socket::Socket() {
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd == -1) {
+    throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
+  }
+
+  timeval to = {0, 500};
+
+  if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &to, sizeof(to)) == -1) {
     throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
   }
   return;
