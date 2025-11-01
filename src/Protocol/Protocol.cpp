@@ -21,11 +21,16 @@ Protocol::Protocol(Network::Socket::Connected &sock) : socket(sock) {
 }
 
 void Protocol::Run() {
-  // Read the first VarInt
+  // Read the first VarInt, which is the length
   Types::VarInt vi;
   vi << *this;
 
   std::cout << vi << std::endl;
+
+  auto raw = socket.Read(vi);
+
+  std::unique_ptr<Packet::Packet> pack = Packet::Packet::PacketFactory(*raw);
+
   return;
 }
 

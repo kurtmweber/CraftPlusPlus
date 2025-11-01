@@ -43,7 +43,7 @@ public:
     return buf;
   }
 
-  Protocol::Packet::Packet Read(size_t num_bytes);
+  std::unique_ptr<std::queue<std::byte>> Read(size_t num_bytes);
 };
 
 class Connected : public Socket {

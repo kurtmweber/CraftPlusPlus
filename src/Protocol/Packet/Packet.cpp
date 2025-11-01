@@ -9,8 +9,33 @@
  * licensing information.
  */
 
+#include <vector>
+
+#include <Protocol/Packet/Packet.h>
+#include <Protocol/Types/Types.h>
+
 namespace Protocol {
 namespace Packet {
-class Packet {};
+std::unique_ptr<Packet> Packet::PacketFactory(std::queue<std::byte> &raw) {
+  // Determine packet type
+  Types::VarInt pt;
+  pt << raw;
+
+  std::unique_ptr<Packet> pack;
+
+  switch ((PacketType)(int32_t)pt) {
+  case PacketType::HANDSHAKE:
+    auto hp = std::make_unique<HandshakePacket>(raw);
+    pack = std::move(hp);
+  }
+
+  return pack;
+}
+
+Packet::Packet(std::queue<std::byte> &rd) {
+  Type = PacketType::UNKNOWN;
+  raw = rd;
+  return;
+}
 } // namespace Packet
 } // namespace Protocol

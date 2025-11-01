@@ -12,6 +12,8 @@
 #include <cerrno>
 #include <cstring>
 #include <iostream>
+#include <memory>
+#include <queue>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -41,15 +43,35 @@ Socket::Socket(int sf) {
   return;
 }
 
-Protocol::Packet::Packet Socket::Read(size_t num_bytes) {
+std::unique_ptr<std::queue<std::byte>> Socket::Read(size_t num_bytes) {
   // replace this with std::inplace_vector once available
-  auto bytes = new std::byte[num_bytes];
+  // auto bytes = std::make_unique<std::queue<std::byte>>;
 
-  auto ret = recv(sockfd, bytes, num_bytes, 0);
+  std::unique_ptr<std::queue<std::byte>> bytes(new std::queue<std::byte>);
+  std::byte tmp[num_bytes];
+  ssize_t ret = 0;
+  ssize_t sum = 0;
 
-  if (ret == -1) {
-    throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
+  while (sum < num_bytes) {
+
+    ret = recv(sockfd, &tmp[sum], num_bytes - sum, MSG_WAITALL);
+
+    if (ret == -1) {
+      if (errno == EINTR) {
+        continue;
+      } else {
+        throw Exceptions::SocketException(errno, __FILE__, __func__, __LINE__);
+      }
+    } else {
+      sum += ret;
+    }
   }
+
+  for (auto i = 0; i < num_bytes; i++) {
+    bytes->push(tmp[i]);
+  }
+
+  return bytes;
 }
 
 Socket::~Socket() { close(sockfd); }

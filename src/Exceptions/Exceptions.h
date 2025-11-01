@@ -16,6 +16,7 @@ namespace Exceptions {
 
 enum class SocketExceptionTypes {
   NotConnected = ENOTCONN,
+  TimeoutExpired = EWOULDBLOCK,
 
 };
 class SocketException : public std::runtime_error {
@@ -27,6 +28,7 @@ public:
   SocketExceptionTypes Cause();
 
 private:
+  void Cause(int cause);
   SocketExceptionTypes ExceptionCause;
 };
 } // namespace Exceptions

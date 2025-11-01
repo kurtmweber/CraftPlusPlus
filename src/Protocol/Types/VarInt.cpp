@@ -13,6 +13,7 @@
 #include <cstring>
 #include <format>
 #include <iostream>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -61,7 +62,7 @@ VarInt &VarInt::operator=(int32_t rhs) {
 
 VarInt &VarInt::operator=(std::vector<uint8_t> vi) {
   uint8_t b;
-  int32_t tmp;
+  int32_t tmp = 0;
   int i = 0;
   for (int i = 0; i < vi.size(); i++) {
     b = vi[i];
@@ -94,6 +95,26 @@ VarInt &VarInt::operator<<(Protocol &rhs) {
   return *this;
 }
 
+VarInt &VarInt::operator<<(std::queue<std::byte> &rhs) {
+  int32_t tmp;
+  std::vector<uint8_t> vi;
+
+  uint8_t inb = static_cast<uint8_t>(rhs.front());
+  rhs.pop();
+  vi.push_back(inb);
+  while (inb & 0x80) {
+    inb = static_cast<uint8_t>(rhs.front());
+    rhs.pop();
+    vi.push_back(inb);
+  }
+
+  *this = vi;
+
+  return *this;
+}
+
 VarInt::operator int32_t() { return val; }
+
+VarInt::operator size_t() { return (size_t)val; }
 } // namespace Types
 } // namespace Protocol

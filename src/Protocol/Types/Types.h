@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <queue>
 #include <vector>
 
 #include <Protocol/Protocol.h>
@@ -50,8 +51,10 @@ public:
   VarInt &operator=(int32_t rhs);
   VarInt &operator=(std::vector<uint8_t> vi);
   VarInt &operator<<(Protocol &rhs);
+  VarInt &operator<<(std::queue<std::byte> &rhs);
 
   operator int32_t();
+  operator size_t();
 };
 } // namespace Types
 } // namespace Protocol

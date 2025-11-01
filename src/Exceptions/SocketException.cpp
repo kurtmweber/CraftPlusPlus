@@ -24,7 +24,7 @@ SocketException::SocketException(std::string_view msg)
 }
 
 SocketException::SocketException(int e) : std::runtime_error(std::strerror(e)) {
-  ExceptionCause = static_cast<SocketExceptionTypes>(e);
+  Cause(e);
   return;
 }
 
@@ -33,9 +33,22 @@ SocketException::SocketException(int e, std::string file, std::string func,
     : std::runtime_error(static_cast<std::string>(std::strerror(e)) + " in " +
                          file + ", line " + std::to_string(line) + ", " +
                          func) {
-  ExceptionCause = static_cast<SocketExceptionTypes>(e);
+  Cause(e);
   return;
 }
 
 SocketExceptionTypes SocketException::Cause() { return ExceptionCause; }
+
+void SocketException::Cause(int cause) {
+  // per POSIX, either of these error codes can be returned for the same
+  // underlying error, and it is not guaranteed that they will have the same
+  // value, so we have to account for both.
+  if ((cause == EAGAIN) || (cause == EWOULDBLOCK)) {
+    cause = EWOULDBLOCK;
+  }
+
+  ExceptionCause = static_cast<SocketExceptionTypes>(cause);
+
+  return;
+}
 } // namespace Exceptions
