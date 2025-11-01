@@ -21,6 +21,7 @@ enum class PacketType { UNKNOWN, HANDSHAKE = 0 };
 class Packet {
 public:
   Packet(std::queue<std::byte> &rd);
+  virtual ~Packet();
   PacketType Type;
 
   static std::unique_ptr<Packet> PacketFactory(std::queue<std::byte> &raw);
@@ -32,6 +33,9 @@ protected:
 class HandshakePacket : public Packet {
 public:
   HandshakePacket(std::queue<std::byte> &rd);
+
+private:
+  int32_t ProocolVersion;
 };
 
 class Handshake : public Packet {};

@@ -37,5 +37,7 @@ Packet::Packet(std::queue<std::byte> &rd) {
   raw = rd;
   return;
 }
+
+Packet::~Packet() { return; }
 } // namespace Packet
 } // namespace Protocol

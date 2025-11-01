@@ -15,8 +15,10 @@
 
 namespace Protocol {
 namespace Packet {
-HandshakePacket::HandshakePacket(std::queue<std::byte> &rd)
-    : Packet(rd) { // protocol version
+HandshakePacket::HandshakePacket(std::queue<std::byte> &rd) : Packet(rd) {
+  Type = PacketType::HANDSHAKE;
+
+  // protocol version
   Types::VarInt pv;
   pv << raw;
 }
