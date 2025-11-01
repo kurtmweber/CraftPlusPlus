@@ -14,16 +14,27 @@ export CXXFLAGS = -std=c++20 ${INCLUDE}
 
 SOURCES=$(shell find . -type f -iname '*.cpp' | sort)
 OBJECTS=$(SOURCES:.cpp=.o)
+DEPFILES=$(SOURCES:.cpp=.d)
 
-#all: craftplusplus
+.PHONY: clean
 
 all: craftplusplus
+
+#include $(SOURCES:.cpp=.d)
 
 craftplusplus: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -MMD -MP $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f craftplusplus $(OBJECTS)
+	rm -f craftplusplus $(OBJECTS) $(DEPFILES)
+
+#%.d: %.cpp
+#	@set -e; rm -f $@; \
+#	$(CXX) -MM $(CXXFLAGS) $< > $@.$$$$; \
+#	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+#	rm -f $@.$$$$
+
+-include $(DEPFILES)
