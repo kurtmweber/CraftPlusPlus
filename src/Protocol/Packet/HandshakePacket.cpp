@@ -21,10 +21,22 @@ HandshakePacket::HandshakePacket(std::queue<std::byte> &rd) : Packet(rd) {
   // protocol version
   Types::VarInt pv;
   pv << raw;
+  ProtocolVersion = pv;
 
   // server address
   Types::String s;
   s << raw;
+  ServerAddress = s;
+
+  // port
+  Types::UnsignedShort p;
+  p << raw;
+  Port = p;
+
+  // intent
+  Types::VarInt i;
+  i << raw;
+  // Intent = static_cast<int32_t>(i);
 }
 } // namespace Packet
 } // namespace Protocol

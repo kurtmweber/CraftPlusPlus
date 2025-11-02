@@ -51,6 +51,16 @@ private:
   std::string Contents;
 };
 
+class UnsignedShort {
+public:
+  UnsignedShort &operator<<(std::queue<std::byte> &rhs);
+
+  operator uint16_t();
+
+private:
+  uint16_t val = 0;
+};
+
 class VarInt {
 
   friend std::ostream &operator<<(std::ostream &os, VarInt const &m);

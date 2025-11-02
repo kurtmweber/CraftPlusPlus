@@ -14,6 +14,7 @@
 
 #include <memory>
 #include <queue>
+#include <string>
 namespace Protocol {
 namespace Packet {
 
@@ -35,7 +36,10 @@ public:
   HandshakePacket(std::queue<std::byte> &rd);
 
 private:
-  int32_t ProocolVersion;
+  int32_t ProtocolVersion;
+  std::string ServerAddress;
+  uint16_t Port;
+  enum class HandshakeIntent { STATUS = 1, LOGIN = 2, TRANSFER = 3 } Intent;
 };
 
 class Handshake : public Packet {};
