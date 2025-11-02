@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <iostream>
 #include <queue>
+#include <string>
 #include <vector>
 
 #include <Protocol/Protocol.h>
@@ -37,6 +38,17 @@ private:
 public:
   Byte &operator=(int8_t rhs);
   operator int8_t() const;
+};
+
+class String {
+public:
+  String();
+
+  String &operator<<(std::queue<std::byte> &rhs);
+  operator std::string();
+
+private:
+  std::string Contents;
 };
 
 class VarInt {
