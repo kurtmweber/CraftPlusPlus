@@ -34,9 +34,10 @@ HandshakePacket::HandshakePacket(std::queue<std::byte> &rd) : Packet(rd) {
   Port = p;
 
   // intent
-  Types::VarInt i;
-  i << raw;
-  // Intent = static_cast<int32_t>(i);
+  Types::VarInt ivi;
+  ivi << raw;
+
+  Intent = ivi.ToEnum<HandshakeIntent>();
 }
 } // namespace Packet
 } // namespace Protocol

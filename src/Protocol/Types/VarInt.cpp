@@ -14,6 +14,7 @@
 #include <format>
 #include <iostream>
 #include <queue>
+#include <source_location>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -116,5 +117,18 @@ VarInt &VarInt::operator<<(std::queue<std::byte> &rhs) {
 VarInt::operator int32_t() { return val; }
 
 VarInt::operator size_t() { return (size_t)val; }
+
+template <> Packet::HandshakeIntent VarInt::ToEnum<Packet::HandshakeIntent>() {
+  switch (val) {
+  case static_cast<int32_t>(Packet::HandshakeIntent::LOGIN):
+    return Packet::HandshakeIntent::LOGIN;
+  case static_cast<int32_t>(Packet::HandshakeIntent::STATUS):
+    return Packet::HandshakeIntent::STATUS;
+  case static_cast<int32_t>(Packet::HandshakeIntent::TRANSFER):
+    return Packet::HandshakeIntent::TRANSFER;
+  default:
+    throw new std::range_error("Invalid assignment to HandshakeIntent");
+  }
+}
 } // namespace Types
 } // namespace Protocol

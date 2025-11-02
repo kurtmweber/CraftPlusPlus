@@ -18,7 +18,10 @@
 namespace Protocol {
 namespace Packet {
 
-enum class PacketType { UNKNOWN, HANDSHAKE = 0 };
+enum class PacketType { HANDSHAKE = 0, UNKNOWN };
+
+enum class HandshakeIntent { STATUS = 1, LOGIN = 2, TRANSFER = 3 };
+
 class Packet {
 public:
   Packet(std::queue<std::byte> &rd);
@@ -39,7 +42,7 @@ private:
   int32_t ProtocolVersion;
   std::string ServerAddress;
   uint16_t Port;
-  enum class HandshakeIntent { STATUS = 1, LOGIN = 2, TRANSFER = 3 } Intent;
+  HandshakeIntent Intent;
 };
 
 class Handshake : public Packet {};

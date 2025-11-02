@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include <Protocol/Packet/Packet.h>
 #include <Protocol/Protocol.h>
 
 #ifndef _PROTOCOL_TYPES_TYPES_H
@@ -77,7 +78,11 @@ public:
 
   operator int32_t();
   operator size_t();
+
+  template <typename T> T ToEnum();
 };
+
+template <> Packet::HandshakeIntent VarInt::ToEnum<Packet::HandshakeIntent>();
 } // namespace Types
 } // namespace Protocol
 

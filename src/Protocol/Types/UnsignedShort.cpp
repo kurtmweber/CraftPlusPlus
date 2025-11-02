@@ -23,6 +23,7 @@ UnsignedShort &UnsignedShort::operator<<(std::queue<std::byte> &rhs) {
   val = (static_cast<int16_t>(rhs.front()) << 8);
   rhs.pop();
   val += static_cast<int16_t>(rhs.front());
+  rhs.pop();
 
   return *this;
 }
